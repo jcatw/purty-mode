@@ -42,21 +42,21 @@
 ;;; Code:
 (defvar purty-regexp-symbol-pairs
   '(;; greek symbols
-	("[\\]?alpha"			. "α")
-	("[\\]?beta"			. "β")
-	("[\\]?gamma"			. "γ")
-	("[\\]?epsilon"			. "ε")
-	("[\\]?lambda"			. "λ")
-	("[\\]?mu"			. "μ")
-	("[\\]?pi"			. "π")
-	("[\\]?theta"			. "θ") 
+	("[\\]?alpha"		. "α")
+	("[\\]?beta"		. "β")
+	("[\\]?gamma"		. "γ")
+	("[\\]?epsilon"		. "ε")
+	("[\\]?lambda"		. "λ")
+	("[\\]?mu"		. "μ")
+	("[\\]?pi"		. "π")
+	("[\\]?theta"		. "θ") 
 	 
     ;; operators	    
-	("[\\]?[Ss]um"			. "Σ")
+	("[\\]?[Ss]um"		. "Σ")
 	("[\\]?[Pp]roduct"	. "Π")
-	("[\\]prod" . "Π")
+	("[\\]prod"		. "Π")
 	("[Ee]lement"		. "∈")
-	("[\\]in" . "∈"))
+	("[\\]in"		. "∈")))
 	
   "List of (regexp . string) pairs to be substituted when
   purty-mode is active.  Substitutions can be added by appending
