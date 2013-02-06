@@ -1,0 +1,23 @@
+* Purty Mode
+  purty-mode.el --- Safely pretty-print greek letters, mathematical symbols, or anything else.
+
+** Commentary
+   purty-mode is a minor mode which swaps whatever-regexp-you-want for
+   whatever-symbol-you-want on the fly.  Given that the text itself is
+   left untouched, purty-mode can safely be used when writing code or
+   latex or org or whatever.
+
+** Setup
+   Just place purty-mode.el somewhere on your load path, and add
+   (require 'purty-mode) to your .emacs.
+
+** Customization
+   Substitutions can be added by appending (regexp . string) pairs to
+   purty-regexp-symbol-pairs:
+   
+#+begin_src emacs-lisp
+  (setq purty-regexp-symbol-pairs (cons '(" Xi " . " Ξ ") purty-regexp-symbol-pairs))
+#+end_src
+
+** Acknowledgements
+   This source is essentially an extension of Mark Trigg's lambda-mode.el.
