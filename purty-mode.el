@@ -64,9 +64,6 @@
 
     (setq purty-regexp-symbol-pairs (cons '(\" Xi \" . \" Ξ \") purty-regexp-symbol-pairs))"
 
-(setq purty-regexp-symbol-pairs
-  )
-
 (defun purty-fontify (beg end)
   (save-excursion
     (purty-unfontify beg end)
