@@ -40,7 +40,15 @@
 ;; This source is essentially an extension of Mark Trigg's lambda-mode.el.
 
 ;;; Code:
-(defvar purty-regexp-symbol-pairs
+(defvar purty-regexp-symbol-pairs nil
+  "List of (regexp . string) pairs to be substituted when
+purty-mode is active.  Substitutions can be added via the
+purty-add-pair function.
+
+  (purty-add-pair '(\"Xi\" . \"Ξ\"))")
+
+(setq purty-regexp-symbol-pairs
+  (mapcar #'purty-enhance-pair
   '(;; greek symbols
 	("[\\]?alpha"		. "α")
 	("[\\]?beta"		. "β")
@@ -52,18 +60,39 @@
 	("[\\]?theta"		. "θ") 
 	 
     ;; operators	    
-	("[\\]?\)[Ss]um"	. "Σ")
-	("[\\]?\)[Pp]roduct"	. "Π")
+	("[\\]?[Ss]um"		. "Σ")
+	("[\\]?[Pp]roduct"	. "Π")
 	("[\\]prod"		. "Π")
 	("[Ee]lement"		. "∈")
-	("[\\]in"		. "∈"))
+	("[\\]in"		. "∈")
+	("[\\]forall"		. "∀")
+
+    ;; sub/super
+	("_0" . "₀")
+	("_1" . "₁")
+	("_2" . "₂")
+	("_3" . "₃")
+	("_4" . "₄")
+	("_5" . "₅")
+	("_6" . "₆")
+	("_7" . "₇")
+	("_8" . "₈")
+	("_9" . "₉")
+
+	("\\^0" . "⁰")
+	("\\^1" . "¹")
+	("\\^2" . "²")
+	("\\^3" . "³")
+	("\\^4" . "⁴")
+	("\\^5" . "⁵")
+	("\\^6" . "⁶")
+	("\\^7" . "⁷")
+	("\\^8" . "⁸")
+	("\\^9" . "⁹")
 	
-  "List of (regexp . string) pairs to be substituted when
-  purty-mode is active.  Substitutions can be added via the
-  purty-add-pair function.
-
-    (purty-add-pair '(\"Xi\" . \"Ξ\"))")
-
+	)))
+	
+  
 (defun purty-enhance-pair (pair)
   "Enhances the provided (regexp . symbol) pair so that the
   regexp plays nicely with its surroundings.  An enhanced pair will not
@@ -73,12 +102,16 @@
   upon replacement."
   (let ((reg (car pair))
 	(sym (cdr pair)))
-    (cons (concat "\\(?:^\\|[^A-Za-z]\\)[^A-Za-z]*\\("
-		  reg
-		  "\\)[^A-Za-z]*\\(?:[^A-Za-z]\\|$\\)")
-	  sym)))
+    (let ((leading-char (substring reg 0 1)))
+      (if (not (or (string= leading-char "_")
+		   (string= leading-char "^")))
+	  (cons (concat "\\(?:^\\|[^A-Za-z]\\)[^A-Za-z]*\\("
+			reg
+			"\\)[^A-Za-z]*\\(?:[^A-Za-z]\\|$\\)")
+		sym)
+	(cons (concat "\\(" reg "\\)") sym)))))
 
-(setq purty-regexp-symbol-pairs (mapcar #'purty-enhance-pair
+'(setq purty-regexp-symbol-pairs (mapcar #'purty-enhance-pair
 				      purty-regexp-symbol-pairs))
 
 (defun purty-add-pair (pair)
