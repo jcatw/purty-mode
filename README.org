@@ -9,16 +9,15 @@
 
 ** Setup
    Just place purty-mode.el somewhere on your load path, and add
-   (require 'purty-mode) to your .emacs.
+   *(require 'purty-mode)* to your .emacs.
 
    *M-x purdy-mode* invokes purdy-mode on the current buffer.
 
 ** Customization
    Substitutions can be added to purty via the purty-add-pair function.
       
-#+begin_src emacs-lisp
-(purty-add-pair '("Xi" . "Ξ"))
-#+end_src
+   *(purty-add-pair '("Xi" . "Ξ"))*
+
 
 ** Acknowledgements
    This source is essentially an extension of Mark Trigg's lambda-mode.el.
