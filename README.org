@@ -11,12 +11,13 @@
    Just place purty-mode.el somewhere on your load path, and add
    (require 'purty-mode) to your .emacs.
 
+   *M-x purdy-mode* invokes purdy-mode on the current buffer.
+
 ** Customization
-   Substitutions can be added by appending (regexp . string) pairs to
-   purty-regexp-symbol-pairs:
-   
+   Substitutions can be added to purty via the purty-add-pair function.
+      
 #+begin_src emacs-lisp
-  (setq purty-regexp-symbol-pairs (cons '(" Xi " . " Ξ ") purty-regexp-symbol-pairs))
+(purty-add-pair '("Xi" . "Ξ"))
 #+end_src
 
 ** Acknowledgements

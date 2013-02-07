@@ -20,8 +20,6 @@
 
 ;;; Commentary:
 
-;; This source is essentially an extension of Mark Trigg's lambda-mode.el.
-
 ;; purty-mode is a minor mode which swaps whatever-regexp-you-want for
 ;; whatever-symbol-you-want on the fly.  Given that the text itself is
 ;; left untouched, purty-mode can safely be used when writing code or
@@ -34,10 +32,12 @@
 
 ;;; Customization:
 
-;; Substitutions can be added by appending (regexp . string) pairs to
-;; purty-regexp-symbol-pairs:
-;;
-;;    (setq purty-regexp-symbol-pairs (cons '(" Xi " . " Ξ ") purty-regexp-symbol-pairs))
+;; Substitutions can be added to purty via the purty-add-pair function.
+;;    (purty-add-pair '("Xi" . "Ξ"))
+
+;;; Acknowledgements:
+
+;; This source is essentially an extension of Mark Trigg's lambda-mode.el.
 
 ;;; Code:
 (defvar purty-regexp-symbol-pairs
@@ -52,17 +52,38 @@
 	("[\\]?theta"		. "θ") 
 	 
     ;; operators	    
-	("[\\]?[Ss]um"		. "Σ")
-	("[\\]?[Pp]roduct"	. "Π")
+	("[\\]?\)[Ss]um"	. "Σ")
+	("[\\]?\)[Pp]roduct"	. "Π")
 	("[\\]prod"		. "Π")
 	("[Ee]lement"		. "∈")
-	("[\\]in"		. "∈")))
+	("[\\]in"		. "∈"))
 	
   "List of (regexp . string) pairs to be substituted when
-  purty-mode is active.  Substitutions can be added by appending
-  pairs:
+  purty-mode is active.  Substitutions can be added via the
+  purty-add-pair function.
 
-    (setq purty-regexp-symbol-pairs (cons '(\" Xi \" . \" Ξ \") purty-regexp-symbol-pairs))"
+    (purty-add-pair '(\"Xi\" . \"Ξ\"))")
+
+(defun purty-enhance-pair (pair)
+  "Enhances the provided (regexp . symbol) pair so that the
+  regexp plays nicely with its surroundings.  An enhanced pair will not
+  clobber words that contain the regexp, will not be tripped up by
+  line endings, will still replace when surrounded by non
+  alphabetic characters, and will not suck up additional characters
+  upon replacement."
+  (let ((reg (car pair))
+	(sym (cdr pair)))
+    (cons (concat "\\(?:^\\|[^A-Za-z]\\)[^A-Za-z]*\\("
+		  reg
+		  "\\)[^A-Za-z]*\\(?:[^A-Za-z]\\|$\\)")
+	  sym)))
+
+(setq purty-regexp-symbol-pairs (mapcar #'purty-enhance-pair
+				      purty-regexp-symbol-pairs))
+
+(defun purty-add-pair (pair)
+  "Adds a (regexp . symbol) pair to purty's replacement table."
+  (setq purty-regexp-symbol-pairs (cons pair purty-regexp-symbol-pairs)))
 
 (defun purty-fontify (beg end)
   (save-excursion
@@ -83,7 +104,7 @@
       (while (re-search-forward reg end t)
 	(let ((o (car (overlays-at (match-beginning 0)))))
 	  (unless (and o (eq (overlay-get o 'type) 'purty))
-	    (let ((overlay (make-overlay (match-beginning 0) (match-end 0))))
+	    (let ((overlay (make-overlay (match-beginning 1) (match-end 1))))
 	      (overlay-put overlay 'type 'purty)
 	      (overlay-put overlay 'evaporate t)
 	      (overlay-put overlay 'display sym))))))))
