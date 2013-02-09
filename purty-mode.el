@@ -50,22 +50,60 @@ purty-add-pair function.
 (setq purty-regexp-symbol-pairs
   (mapcar #'purty-enhance-pair
   '(;; greek symbols
-	("[\\]?alpha"		. "α")
-	("[\\]?beta"		. "β")
-	("[\\]?gamma"		. "γ")
-	("[\\]?epsilon"		. "ε")
-	("[\\]?lambda"		. "λ")
-	("[\\]?mu"		. "μ")
-	("[\\]?pi"		. "π")
-	("[\\]?theta"		. "θ") 
-	 
-    ;; operators	    
-	("[\\]?[Ss]um"		. "Σ")
-	("[\\]?[Pp]roduct"	. "Π")
+        ("alpha"	. "α")
+	("beta"		. "β")
+	("chi"		. "χ")
+	("delta"	. "̣δ")
+	("eta"		. "η")
+	("gamma"	. "γ")
+	("kappa"	. "κ")
+	("epsilon"	. "ε")
+	("lambda"	. "λ")
+	("Lambda"	. "Λ")
+	("mu"		. "μ")
+	("omega"	. "ω")
+	("phi"		. "φ")
+	("pi"		. "π")
+	("psi"		. "ψ")
+	("Psi"		. "Ψ")
+	("rho"		. "ρ")
+	("sigma"	. "σ")
+	("Sigma"	. "Σ")
+	("tau"		. "τ")
+	("theta"	. "θ")
+	("Theta"	. "Θ")
+	("xi"		. "ξ")
+	("zeta"		. "ζ")
+	
+    ;; math
+	
+	("[Ss]um"		. "Σ")
+	("[Pp]roduct"		. "Π")
 	("[\\]prod"		. "Π")
+			 
+	("[\\]approx"		. "≈")
+	("[\\]cap"		. "∩")
+	("[\\]intersect"	. "∩")
+	("[\\]cup"		. "∪")
+	("[\\]union"		. "∪")
 	("[Ee]lement"		. "∈")
 	("[\\]in"		. "∈")
+	("[\\]notin"		. "∉")
 	("[\\]forall"		. "∀")
+	("[\\]geq"		. "≥")
+	("[\\]leq"		. "≤")
+	("[\\]defs"		. "≙")
+	("[\\]equiv"		. "≡")
+	("[\\]emptyset"		. "∅")
+	("[\\]partial"		. "∂")
+	("[\\]pm"		. "±")
+	("[\\]nabla"		. "∇")
+	("[\\]infty"		. "∞")
+	("[\\]int"		. "∫")
+	("[\\]indep"		. "⊥")
+	("[\\]neq"		. "≠")
+	("[\\]subset"		. "⊂")
+	("[\\]subseteq"		. "⊆")
 
     ;; sub/super
 	("_0" . "₀")
@@ -89,7 +127,6 @@ purty-add-pair function.
 	("\\^7" . "⁷")
 	("\\^8" . "⁸")
 	("\\^9" . "⁹")
-	
 	)))
 	
   
@@ -110,9 +147,6 @@ purty-add-pair function.
 			"\\)[^A-Za-z]*\\(?:[^A-Za-z]\\|$\\)")
 		sym)
 	(cons (concat "\\(" reg "\\)") sym)))))
-
-'(setq purty-regexp-symbol-pairs (mapcar #'purty-enhance-pair
-				      purty-regexp-symbol-pairs))
 
 (defun purty-add-pair (pair)
   "Adds a (regexp . symbol) pair to purty's replacement table."
