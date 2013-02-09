@@ -1,5 +1,4 @@
-;;; purty-mode.el --- Safely pretty-print greek letters, mathematical
-;;; symbols, or anything else.
+;;; purty-mode.el --- Safely pretty-print greek letters, mathematical symbols, or anything else.
 
 ;; Author: James Atwood <jatwood@cs.umass.edu>
 
@@ -27,7 +26,8 @@
 
 ;;; Setup:
 
-;; Just place purty-mode.el somewhere on your load path, and add
+;; If installed from source (rather than a package.el archive such as
+;; MELPA), then place purty-mode.el somewhere on your load path, and add
 ;; (require 'purty-mode) to your .emacs.
 
 ;;; Customization:
@@ -182,6 +182,7 @@ purty-add-pair function.
               (delete-overlay o)))
         (overlays-in beg end)))
 
+;;;###autoload
 (define-minor-mode purty-mode
   "Indicate where only a single space has been used."
   nil " purty" nil
