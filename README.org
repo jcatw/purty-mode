@@ -8,14 +8,15 @@
    latex or org or whatever.
 
 ** Setup
-   Just place purty-mode.el somewhere on your load path, and add
-   *(require 'purty-mode)* to your .emacs.
+   Either install purty-mode from a package.el archive such as [[http://melpa.milkbox.net/][MELPA]],
+   or place purty-mode.el somewhere on your load path, and
+   add *(require 'purty-mode)* to your .emacs.
 
-   *M-x purdy-mode* invokes purdy-mode on the current buffer.
+   *M-x purty-mode* invokes purdy-mode on the current buffer.
 
 ** Customization
    Substitutions can be added to purty via the purty-add-pair function.
-      
+
    *(purty-add-pair '("Xi" . "Ξ"))*
 
 
