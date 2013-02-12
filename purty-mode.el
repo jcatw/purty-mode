@@ -141,10 +141,10 @@ purty-add-pair function.
 	(sym (cdr pair)))
     (let ((leading-char (substring reg 0 1)))
       (if (not (or (string= leading-char "_")
-		   (string= leading-char "^")))
+		   (string= (substring reg 0 2) "\\^")))
 	  (cons (concat "\\(?:^\\|[^A-Za-z]\\)[^A-Za-z]*\\("
 			reg
-			"\\)[^A-Za-z]*\\(?:[^A-Za-z]\\|$\\)")
+			"\\)[^A-Za-z]*\\(?:[^A-Za-z]*\\|$\\)")
 		sym)
 	(cons (concat "\\(" reg "\\)") sym)))))
 
