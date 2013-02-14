@@ -47,6 +47,27 @@ purty-add-pair function.
 
   (purty-add-pair '(\"Xi\" . \"Ξ\"))")
 
+
+	
+  
+(defun purty-enhance-pair (pair)
+  "Enhances the provided (regexp . symbol) pair so that the
+  regexp plays nicely with its surroundings.  An enhanced pair will not
+  clobber words that contain the regexp, will not be tripped up by
+  line endings, will still replace when surrounded by non
+  alphabetic characters, and will not suck up additional characters
+  upon replacement."
+  (let ((reg (car pair))
+	(sym (cdr pair)))
+    (let ((leading-char (substring reg 0 1)))
+      (if (not (or (string= leading-char "_")
+		   (string= (substring reg 0 2) "\\^")))
+	  (cons (concat "\\(?:^\\|[^A-Za-z]\\)[^A-Za-z]*\\("
+			reg
+			"\\)[^A-Za-z]*\\(?:[^A-Za-z]*\\|$\\)")
+		sym)
+	(cons (concat "\\(" reg "\\)") sym)))))
+
 (setq purty-regexp-symbol-pairs
   (mapcar #'purty-enhance-pair
   '(;; greek symbols
@@ -131,25 +152,6 @@ purty-add-pair function.
 	("\\^9" . "⁹")
 
 	)))
-	
-  
-(defun purty-enhance-pair (pair)
-  "Enhances the provided (regexp . symbol) pair so that the
-  regexp plays nicely with its surroundings.  An enhanced pair will not
-  clobber words that contain the regexp, will not be tripped up by
-  line endings, will still replace when surrounded by non
-  alphabetic characters, and will not suck up additional characters
-  upon replacement."
-  (let ((reg (car pair))
-	(sym (cdr pair)))
-    (let ((leading-char (substring reg 0 1)))
-      (if (not (or (string= leading-char "_")
-		   (string= (substring reg 0 2) "\\^")))
-	  (cons (concat "\\(?:^\\|[^A-Za-z]\\)[^A-Za-z]*\\("
-			reg
-			"\\)[^A-Za-z]*\\(?:[^A-Za-z]*\\|$\\)")
-		sym)
-	(cons (concat "\\(" reg "\\)") sym)))))
 
 (defun purty-add-pair (pair)
   "Adds a (regexp . symbol) pair to purty's replacement table."
