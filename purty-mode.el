@@ -59,14 +59,17 @@ purty-add-pair function.
   upon replacement."
   (let ((reg (car pair))
 	(sym (cdr pair)))
-    (let ((leading-char (substring reg 0 1)))
-      (if (not (or (string= leading-char "_")
-		   (string= (substring reg 0 2) "\\^")))
-	  (cons (concat "\\(?:^\\|[^A-Za-z]\\)[^A-Za-z]*\\("
-			reg
-			"\\)[^A-Za-z]*\\(?:[^A-Za-z]*\\|$\\)")
-		sym)
-	(cons (concat "\\(" reg "\\)") sym)))))
+;; good god, what was I thinking here
+;;    (let ((leading-char (substring reg 0 1)))
+;;      (if (not (or (string= leading-char "_")
+;;		   (string= (substring reg 0 2) "\\^")))
+;;	  (cons (concat "\\(?:^\\|[^A-Za-z]\\)[^A-Za-z]*\\("
+;;			reg
+;;			"\\)[^A-Za-z]*\\(?:[^A-Za-z]*\\|$\\)")
+;;		sym)
+;;	(cons (concat "\\(" reg "\\)") sym)))))
+    ;; place word boundary around regexps and make them a group
+    (cons (concat "\\(\\b" reg "\\b\\)") sym)))
 
 (setq purty-regexp-symbol-pairs
   (mapcar #'purty-enhance-pair
@@ -129,27 +132,29 @@ purty-add-pair function.
 	 
 
     ;; sub/super
-	("_0" . "₀")
-	("_1" . "₁")
-	("_2" . "₂")
-	("_3" . "₃")
-	("_4" . "₄")
-	("_5" . "₅")
-	("_6" . "₆")
-	("_7" . "₇")
-	("_8" . "₈")
-	("_9" . "₉")	
-
-	("\\^0" . "⁰")
-	("\\^1" . "¹")
-	("\\^2" . "²")
-	("\\^3" . "³")
-	("\\^4" . "⁴")
-	("\\^5" . "⁵")
-	("\\^6" . "⁶")
-	("\\^7" . "⁷")
-	("\\^8" . "⁸")
-	("\\^9" . "⁹")
+    ;; these don't seem to be rendering, unsure what is up
+    ;; tried TeX input and Unicode character codes, no luck
+	;;("_0" . "₀")
+	;;("_1" . "₁")
+	;;("_2" . "₂")
+	;;("_3" . "₃")
+	;;("_4" . "₄")
+	;;("_5" . "₅")
+	;;("_6" . "₆")
+	;;("_7" . "₇")
+	;;("_8" . "₈")
+	;;("_9" . "₉")	
+	;;
+	;;("\\^0" . "")
+	;;("\\^1" . "¹")
+	;;("\\^2" . "²")
+	;;("\\^3" . "³")
+	;;("\\^4" . "⁴")
+	;;("\\^5" . "⁵")
+	;;("\\^6" . "⁶")
+	;;("\\^7" . "⁷")
+	;;("\\^8" . "⁸")
+	;;("\\^9" . "⁹")
 
 	)))
 
@@ -167,6 +172,8 @@ purty-add-pair function.
   (cond ((not regexp-symbol-pairs) t)
 	(t (purty-fontify-symbol beg end (car regexp-symbol-pairs))
 	   (purty-fontify-symbols beg end (cdr regexp-symbol-pairs)))))
+
+
 
 (defun purty-fontify-symbol (beg end regexp-symbol-pair)
   (save-excursion
@@ -189,13 +196,21 @@ purty-add-pair function.
 
 ;;;###autoload
 (define-minor-mode purty-mode
-  "Indicate where only a single space has been used."
+  "Purty up your buffer."
   nil " purty" nil
   (cond ((not purty-mode)
          (jit-lock-unregister 'purty-fontify)
-         (purty-unfontify (point-min) (point-max)))
-        (t (purty-fontify (point-min) (point-max))
-           (jit-lock-register 'purty-fontify))))
+         (purty-unfontify (point-min) (point-max))
+	 (set-syntax-table (standard-syntax-table)))
+        (t (let ((table (make-syntax-table)))
+	     ;; it is ok to clobber (alpha) -> (α)
+	     ;; but not music -> μsic
+	     ;; set syntax table accordingly
+	     (modify-syntax-entry ?\( ".") 
+	     (modify-syntax-entry ?\) ".")
+	     (set-syntax-table table)
+	     (purty-fontify (point-min) (point-max))
+	     (jit-lock-register 'purty-fontify)))))
 
 
 (provide 'purty-mode)
