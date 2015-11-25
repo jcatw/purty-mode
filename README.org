@@ -8,7 +8,7 @@
    latex or org or whatever.
 
 ** Setup
-   Either install purty-mode from a package.el archive such as [[http://melpa.milkbox.net/][MELPA]],
+   Either install purty-mode from a package.el archive such as [[https://melpa.org/][MELPA]],
    or place purty-mode.el somewhere on your load path, and
    add *(require 'purty-mode)* to your .emacs.
 
